@@ -65,16 +65,18 @@ class XDetectMobileBrowser extends CApplicationComponent {
 	 * @param bool $fresh - true: ignore cookie, and get a fresh value
 	 */
 	public function getIsMobile($fresh=true) {
-		if ($fresh) return ($this->isMobileBrowser());
-		if (!isset($this->_isMobile)) {
-			$cookie = Yii::app()->request->cookies[self::COOKIE_NAME_IS];
-			if (isset($cookie)) {
-				$this->_isMobile = (bool)$cookie->value; // int to bool
-			} else {
-				$this->_isMobile = $this->isMobileBrowser();
-				$this->setCookie(self::COOKIE_NAME_IS, $this->_isMobile);
+		if ($fresh) $this->_isMobile=$this->isMobileBrowser();
+			else {
+				if (!isset($this->_isMobile)) {
+					$cookie = Yii::app()->request->cookies[self::COOKIE_NAME_IS];
+					if (isset($cookie)) {
+						$this->_isMobile = (bool)$cookie->value; // int to bool
+					} else {
+						$this->_isMobile = $this->isMobileBrowser();
+						$this->setCookie(self::COOKIE_NAME_IS, $this->_isMobile);
+					}
+				}
 			}
-		}
 		return $this->_isMobile;
 	}
 
